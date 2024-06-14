@@ -1,0 +1,57 @@
+#include <stdio.h>
+#include <stdbool.h>
+
+// Grammar:
+// S -> AB
+// A -> aA | e
+// B -> bB | e
+
+bool isA(char *input, int *index);
+bool isB(char *input, int *index);
+bool isS(char *input);
+
+bool isA(char *input, int *index) {
+    if (input[*index] == 'a') {
+        (*index)++;
+        return isA(input, index);
+    }
+    return true;
+}
+
+bool isB(char *input, int *index) {
+    if (input[*index] == 'b') {
+        (*index)++;
+        return isB(input, index);
+    }
+    return true;
+}
+
+bool isS(char *input) {
+    int index = 0;
+    // S -> AB
+    if (isA(input, &index) && isB(input, &index)) {
+        // Check if the entire string has been consumed
+        if (input[index] == '\0') {
+            return true;
+        }
+    }
+    return false;
+}
+
+int main() {
+    char input[100];
+
+    printf("Enter the input string: ");
+    fgets(input, sizeof(input), stdin);
+
+    // Removing the trailing newline character from input
+    input[strlen(input) - 1] = '\0';
+
+    if (isS(input)) {
+        printf("Input string satisfies the grammar.\n");
+    } else {
+        printf("Input string does not satisfy the grammar.\n");
+    }
+
+    return 0;
+}
